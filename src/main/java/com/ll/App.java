@@ -31,7 +31,7 @@ public class App {
             } else if ("목록".equals(cmd)) {
                 controller.actionList();
             } else if ("삭제?id=1".equals(cmd)) {
-                controller.actionRemove();
+                controller.actionRemove(cmd);
             }
         }
     }

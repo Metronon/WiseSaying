@@ -40,7 +40,10 @@ public class Controller {
         }
     }
 
-    public void actionRemove() {
-        System.out.println("1번 명언이 삭제되었습니다.");
+    public void actionRemove(String cmd) {
+        String[] parts = cmd.split("=");
+        int idToRemove = Integer.parseInt(parts[1]);
+        wisesList.removeIf(w -> w.getId() == idToRemove);
+        System.out.printf("%d번 명언이 삭제되었습니다./n", idToRemove);
     }
 }
