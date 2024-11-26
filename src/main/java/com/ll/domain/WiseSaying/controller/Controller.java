@@ -43,7 +43,12 @@ public class Controller {
     public void actionRemove(String cmd) {
         String[] parts = cmd.split("=");
         int idToRemove = Integer.parseInt(parts[1]);
-        wisesList.removeIf(w -> w.getId() == idToRemove);
-        System.out.printf("%d번 명언이 삭제되었습니다./n", idToRemove);
+        boolean isRemoved = wisesList.removeIf(w -> w.getId() == idToRemove);
+
+        if (!isRemoved) {
+            System.out.printf("%d번 명언이 삭제되었습니다./n", idToRemove);
+        } else {
+            System.out.printf("%d번 명언은 존재하지 않습니다./n", idToRemove);
+        }
     }
 }
