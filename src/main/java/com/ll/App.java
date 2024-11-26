@@ -28,6 +28,8 @@ public class App {
                 break;
             } else if ("등록".equals(cmd)) {
                 controller.actionAdd();
+            } else if ("목록".equals(cmd)) {
+                controller.actionList();
             }
         }
     }
