@@ -39,4 +39,8 @@ public class Controller {
             System.out.println(wiseSaying.getId() + " / " + wiseSaying.getAuthor() + " / " + wiseSaying.getContent());
         }
     }
+
+    public void actionRemove() {
+        System.out.println("1번 명언이 삭제되었습니다.");
+    }
 }
