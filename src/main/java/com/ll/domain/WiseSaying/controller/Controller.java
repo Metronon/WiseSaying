@@ -35,5 +35,8 @@ public class Controller {
     public void actionList() {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
+        for (WiseSaying wiseSaying : wisesList.reversed()) {
+            System.out.println(wiseSaying.getId() + " / " + wiseSaying.getAuthor() + " / " + wiseSaying.getContent());
+        }
     }
 }

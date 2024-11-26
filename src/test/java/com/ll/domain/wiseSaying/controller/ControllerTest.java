@@ -74,4 +74,18 @@ public class ControllerTest {
                 .contains("번호 / 작가 / 명언")
                 .contains("----------------------");
     }
+
+    @Test
+    @DisplayName("목록 최종 테스트")
+    public void t9() {
+        String output = AppTest.run("""
+                등록
+                나의 죽음을 알리지 마라.
+                이순신 장군
+                목록
+                """);
+
+        assertThat(output)
+                .contains("1 / 이순신 장군 / 나의 죽음을 알리지 마라.");
+    }
 }
