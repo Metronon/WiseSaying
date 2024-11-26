@@ -88,4 +88,18 @@ public class ControllerTest {
         assertThat(output)
                 .contains("1 / 이순신 장군 / 나의 죽음을 알리지 마라.");
     }
+
+    @Test
+    @DisplayName("삭제 테스트")
+    public void t10() {
+        String output = AppTest.run("""
+                등록
+                나의 죽음을 알리지 마라.
+                이순신 장군
+                삭제?id=1
+                """);
+
+        assertThat(output)
+                .contains("1번 명언이 삭제되었습니다.");
+    }
 }
