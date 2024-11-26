@@ -102,4 +102,20 @@ public class ControllerTest {
         assertThat(output)
                 .contains("1번 명언이 삭제되었습니다.");
     }
+
+    @Test
+    @DisplayName("중복 삭제 테스트")
+    public void t11() {
+        String output = AppTest.run("""
+                등록
+                나의 죽음을 알리지 마라.
+                이순신 장군
+                삭제?id=1
+                삭제?id=1
+                """);
+
+        assertThat(output)
+                .contains("1번 명언이 삭제되었습니다.")
+                .contains("1번 명언은 존재하지 않습니다.");
+    }
 }
