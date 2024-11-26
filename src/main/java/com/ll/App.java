@@ -26,6 +26,8 @@ public class App {
             if ("종료".equals(cmd)) {
                 systemController.actionExit();
                 break;
+            } else if ("등록".equals(cmd)) {
+                controller.actionAdd();
             }
         }
     }

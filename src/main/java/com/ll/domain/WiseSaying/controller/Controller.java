@@ -16,4 +16,9 @@ public class Controller {
         this.wisesList = new ArrayList<>();
         this.lastId = 0;
     }
+
+    public void actionAdd() {
+        System.out.println("명언 : ");
+        System.out.println("작가 : ");
+    }
 }
