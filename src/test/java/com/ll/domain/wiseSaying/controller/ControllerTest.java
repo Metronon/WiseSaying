@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ControllerTest {
+
     @Test
     @DisplayName("종료 테스트")
     public void t4() {
@@ -18,8 +19,8 @@ public class ControllerTest {
                 .contains("명언 앱을 종료합니다.");
     }
 
-        @Test
-        @DisplayName("등록 테스트")
+    @Test
+    @DisplayName("등록 테스트")
         public void t5() {
             String output = AppTest.run("""
                     등록
@@ -31,6 +32,7 @@ public class ControllerTest {
                     .contains("명언 : ")
                     .contains("작가 : ");
     }
+
     @Test
     @DisplayName("ID 확인 테스트")
 
@@ -117,5 +119,20 @@ public class ControllerTest {
         assertThat(output)
                 .contains("1번 명언이 삭제되었습니다.")
                 .contains("1번 명언은 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("수정 출력 테스트")
+    public void t12() {
+        String output = AppTest.run("""
+                등록
+                나의 죽음을 알리지 마라.
+                이순신 장군
+                수정?id=1
+                """);
+
+        assertThat(output)
+                .contains("명언(기존) : 나의 죽음을 알리지 마라.")
+                .contains("작가(기존) : 이순신 장군");
     }
 }

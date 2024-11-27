@@ -1,7 +1,7 @@
 package com.ll;
 
-import com.ll.domain.system.controller.SystemController;
 import com.ll.domain.WiseSaying.controller.Controller;
+import com.ll.domain.system.controller.SystemController;
 
 import java.util.Scanner;
 
@@ -23,15 +23,24 @@ public class App {
             System.out.print("명령) ");
             String cmd = sc.nextLine();
 
-            if ("종료".equals(cmd)) {
-                systemController.actionExit();
-                break;
-            } else if ("등록".equals(cmd)) {
-                controller.actionAdd();
-            } else if ("목록".equals(cmd)) {
-                controller.actionList();
-            } else if ("삭제?id=1".equals(cmd)) {
-                controller.actionRemove(cmd);
+            Command command = new Command(cmd);
+
+            switch (command.getActionName()) {
+                case "종료":
+                    systemController.actionExit();
+                    return;
+                case "등록":
+                    controller.actionAdd();
+                    break;
+                case "목록":
+                    controller.actionList();
+                    break;
+                case "삭제":
+                    controller.actionRemove(command);
+                    break;
+                case "수정":
+                    controller.actionModify(command);
+                    break;
             }
         }
     }
