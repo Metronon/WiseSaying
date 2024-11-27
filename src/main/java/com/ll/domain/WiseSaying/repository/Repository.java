@@ -15,9 +15,14 @@ public class Repository {
         this.lastId = 0;
     }
 
-    public void save(WiseSaying wiseSaying) {
+    public WiseSaying save(WiseSaying wiseSaying) {
+        if (!wiseSaying.isNew()) {
+            return wiseSaying;
+        }
+
         wiseSaying.setId(++lastId);
         wisesList.add(wiseSaying);
+        return wiseSaying;
     }
 
     public List<WiseSaying> findAll() {
