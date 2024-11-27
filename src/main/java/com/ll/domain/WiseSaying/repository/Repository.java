@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface Repository {
-    WiseSaying save(WiseSaying wiseSaying);
+    WiseSaying  save(WiseSaying wiseSaying);
 
     List<WiseSaying> findAll();
 
