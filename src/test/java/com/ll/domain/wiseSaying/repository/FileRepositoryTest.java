@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileRepositoryTest {
@@ -27,12 +29,19 @@ public class FileRepositoryTest {
     @Test
     @DisplayName("명언 저장")
     public void t1() {
-        fileRepository.save(new WiseSaying(0, "명언1", "저자1"));
+        WiseSaying wiseSaying = new WiseSaying(0, "명언1", "저자1");
+        fileRepository.save(wiseSaying);
 
         String filePath = "db/test/wiseSaying/1.json";
 
         assertThat(
                 Util.file.exists(filePath)
         ).isTrue();
+
+        String jsonStr = Util.file.get(filePath, "");
+        Map<String, Object> wiseSayingMap = Util.json.toMap(jsonStr);
+        WiseSaying wiseSayingRestored = new WiseSaying(wiseSayingMap);
+
+        assertThat(wiseSayingRestored).isEqualTo(wiseSaying);
     }
 }
