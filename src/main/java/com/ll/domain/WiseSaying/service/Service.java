@@ -1,6 +1,7 @@
 package com.ll.domain.WiseSaying.service;
 
 import com.ll.domain.WiseSaying.entity.WiseSaying;
+import com.ll.domain.WiseSaying.repository.MemoryRepository;
 import com.ll.domain.WiseSaying.repository.Repository;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public class Service {
     private final Repository repository;
 
     public Service() {
-        this.repository = new Repository();
+        this.repository = new MemoryRepository();
     }
 
     public WiseSaying add(String content, String author) {
