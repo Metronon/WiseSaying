@@ -1,9 +1,11 @@
 package com.ll.domain.WiseSaying.repository;
 
 import com.ll.domain.WiseSaying.entity.WiseSaying;
+import com.ll.standard.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class FileRepository implements Repository{
@@ -21,7 +23,12 @@ public class FileRepository implements Repository{
         }
 
         wiseSaying.setId(++lastId);
-        wisesList.add(wiseSaying);
+
+        Map<String, Object> wiseSayingMap = wiseSaying.toMap();
+        String jsonStr = Util.json.toString(wiseSayingMap);
+
+        Util.file.set("db/test/wiseSaying/1.json", jsonStr);
+
         return wiseSaying;
     }
 
