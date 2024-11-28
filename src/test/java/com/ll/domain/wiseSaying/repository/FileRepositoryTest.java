@@ -32,7 +32,7 @@ public class FileRepositoryTest {
         WiseSaying wiseSaying = new WiseSaying(0, "명언1", "저자1");
         fileRepository.save(wiseSaying);
 
-        String filePath = "db/test/wiseSaying/1.json";
+        String filePath = FileRepository.getRowFilePath(wiseSaying.getId());
 
         assertThat(
                 Util.file.exists(filePath)
@@ -53,7 +53,7 @@ public class FileRepositoryTest {
 
         fileRepository.removeById(wiseSaying.getId());
 
-        String filePath = "db/test/wiseSaying/1.json";
+        String filePath = FileRepository.getRowFilePath(wiseSaying.getId());
 
         assertThat(
                 Util.file.exists(filePath)

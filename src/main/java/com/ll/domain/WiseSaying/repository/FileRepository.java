@@ -12,6 +12,14 @@ public class FileRepository implements Repository{
     private List<WiseSaying> wisesList;
     private int lastId;
 
+    public static String getTableDirPath() {
+        return "db/test/wiseSaying";
+    }
+
+    public static String getRowFilePath(int id) {
+        return getTableDirPath() + "/" + id + ".json";
+    }
+
     public FileRepository() {
         this.wisesList = new ArrayList<>();
         this.lastId = 0;
@@ -27,7 +35,7 @@ public class FileRepository implements Repository{
         Map<String, Object> wiseSayingMap = wiseSaying.toMap();
         String jsonStr = Util.json.toString(wiseSayingMap);
 
-        Util.file.set("db/test/wiseSaying/1.json", jsonStr);
+        Util.file.set(getRowFilePath(wiseSaying.getId()), jsonStr);
 
         return wiseSaying;
     }
@@ -37,7 +45,7 @@ public class FileRepository implements Repository{
     }
 
     public boolean removeById(int id) {
-        return wisesList.removeIf(w -> w.getId() == id);
+        return Util.file.delete(getRowFilePath(id));
     }
 
     public Optional<WiseSaying> findById(int id) {
