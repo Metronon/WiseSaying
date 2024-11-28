@@ -3,45 +3,58 @@ package com.ll.domain.WiseSaying.repository;
 import com.ll.domain.WiseSaying.entity.WiseSaying;
 import com.ll.standard.util.Util;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class FileRepository implements Repository{
-    private List<WiseSaying> wisesList;
     private int lastId;
 
     public static String getTableDirPath() {
         return "db/test/wiseSaying";
     }
 
+    public static String getLastIdPath() {
+        return getTableDirPath() + "/lastId.txt";
+    }
+
     public static String getRowFilePath(int id) {
         return getTableDirPath() + "/" + id + ".json";
     }
 
-    public FileRepository() {
-        this.wisesList = new ArrayList<>();
-        this.lastId = 0;
-    }
-
     public WiseSaying save(WiseSaying wiseSaying) {
-        if (!wiseSaying.isNew()) {
-            return wiseSaying;
+        boolean isNew = wiseSaying.isNew();
+
+        if (isNew) {
+            wiseSaying.setId(getLastId() + 1);
         }
 
-        wiseSaying.setId(++lastId);
-
-        Map<String, Object> wiseSayingMap = wiseSaying.toMap();
-        String jsonStr = Util.json.toString(wiseSayingMap);
+        String jsonStr = wiseSaying.toJsonStr();
 
         Util.file.set(getRowFilePath(wiseSaying.getId()), jsonStr);
+
+        if (isNew) {
+            setLastId(wiseSaying.getId());
+        }
 
         return wiseSaying;
     }
 
     public List<WiseSaying> findAll() {
-        return wisesList;
+        try {
+            return Util.file.walkRegularFiles(
+                            getTableDirPath(),
+                            "\\d+\\.json"
+                    )
+                    .map(path -> Util.file.get(path.toString(), ""))
+                    .map(WiseSaying::new)
+                    .toList();
+        } catch (NoSuchFileException e) {
+            return List.of();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean removeById(int id) {
@@ -49,9 +62,27 @@ public class FileRepository implements Repository{
     }
 
     public Optional<WiseSaying> findById(int id) {
-        return wisesList.stream()
-                .filter(w -> w.getId() == id)
-                .findFirst();
+        String filePath = getRowFilePath(id);
+
+        if (Util.file.notExists(filePath)) {
+            return Optional.empty();
+        }
+
+        String jsonStr = Util.file.get(filePath, "");
+
+        if (jsonStr.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new WiseSaying(jsonStr));
+    }
+
+    public int getLastId() {
+        return Util.file.getAsInt(getLastIdPath(), 0);
+    }
+
+    private void setLastId(int id) {
+        Util.file.set(getLastIdPath(), id);
     }
 }
 

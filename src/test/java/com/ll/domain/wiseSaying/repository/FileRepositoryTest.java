@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,32 +17,25 @@ public class FileRepositoryTest {
 
     @BeforeEach
     public void beforeEach() {
-        Util.file.rmdir("db");
-        Util.file.mkdir("db");
+        Util.file.rmdir(FileRepository.getTableDirPath());
     }
 
     @AfterEach
     public void afterEach() {
-        Util.file.rmdir("db");
+        Util.file.rmdir(FileRepository.getTableDirPath());
     }
 
     @Test
-    @DisplayName("명언 저장")
+    @DisplayName("명언 저장 및 단건 조회 가능 여부")
     public void t1() {
-        WiseSaying wiseSaying = new WiseSaying(0, "명언1", "저자1");
+        WiseSaying wiseSaying = new WiseSaying(0, "명언1", "작가1");
         fileRepository.save(wiseSaying);
 
-        String filePath = FileRepository.getRowFilePath(wiseSaying.getId());
+        Optional<WiseSaying> opWiseSaying = fileRepository.findById(wiseSaying.getId());
 
         assertThat(
-                Util.file.exists(filePath)
-        ).isTrue();
-
-        String jsonStr = Util.file.get(filePath, "");
-        Map<String, Object> wiseSayingMap = Util.json.toMap(jsonStr);
-        WiseSaying wiseSayingRestored = new WiseSaying(wiseSayingMap);
-
-        assertThat(wiseSayingRestored).isEqualTo(wiseSaying);
+                opWiseSaying.get()
+        ).isEqualTo(wiseSaying);
     }
 
     @Test
@@ -58,5 +51,19 @@ public class FileRepositoryTest {
         assertThat(
                 Util.file.exists(filePath)
         ).isFalse();
+    }
+
+    @Test
+    @DisplayName("명언 다건조회")
+    public void t3() {
+        WiseSaying wiseSaying1 = new WiseSaying(0, "꿈을 지녀라. 그러면 어려운 현실을 이길 수 있다.", "괴테");
+        fileRepository.save(wiseSaying1);
+
+        WiseSaying wiseSaying2 = new WiseSaying(0, "나의 삶의 가치는 나의 결정에 달려있다.", "아인슈타인");
+        fileRepository.save(wiseSaying2);
+
+        assertThat(
+                fileRepository.findAll()
+        ).containsExactlyInAnyOrder(wiseSaying1, wiseSaying2);
     }
 }
